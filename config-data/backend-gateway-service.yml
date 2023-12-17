@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: backend-gateway-service
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    enabled: false
+
+cloud:
+  gateway:
+    routes:
+      - id: backend-data-service
+        uri: lb://backend-data-service
+        predicates:
+          - Path=/ingreso-proyectores/**
+      - id: backend-profesor-service
+        uri: lb://backend-profesor-service
+        predicates:
+          - Path=/ingreso-profesores/**
