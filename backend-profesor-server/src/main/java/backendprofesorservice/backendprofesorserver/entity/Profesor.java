@@ -1,8 +1,8 @@
 package backendprofesorservice.backendprofesorserver.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 
 @Entity
 @Table(name = "profesor")
