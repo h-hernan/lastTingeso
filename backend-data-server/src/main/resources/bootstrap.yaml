@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: backend-data-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081/
+      name: backend-data-service
+      label: main
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Datas
+    username: postgres
+    password: 2468
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

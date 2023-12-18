@@ -1,8 +1,10 @@
 server:
-  port: 8081
+  port: 8093
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/Datas
-    username: postgres
-    password: 2468
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: backend-profesor-service
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+    ddl-auto: update
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
+      label: main
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Profesores
+    username: postgres
+    password: 2468

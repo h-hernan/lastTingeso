@@ -1,22 +1,28 @@
-spring:
-  application:
-    name: backend-gateway-service
-
 server:
   port: 8080
-
-eureka:
-  client:
-    enabled: false
-
-cloud:
-  gateway:
-    routes:
-      - id: backend-data-service
-        uri: http://localhost:8081
-        predicates:
-          - Path=/ingreso-proyectores/**
-      - id: backend-profesor-service
-        uri: http://localhost:8082
-        predicates:
-          - Path=/ingreso-profesores/**
+  instance:
+    hostname: localhost
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns: '*'
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
+      routes:
+        - id: backend-profesor-service
+          uri: http://localhost:8092
+          predicates:
+            - Path=/profesor/**
+        - id: backend-data-service
+          uri: http://localhost:8093
+          predicates:
+            - Path=/datas/**
