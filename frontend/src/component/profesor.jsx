@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ProfesorService from '../service/profesorService';
 import { Paper, Typography, TextField, Button, Container, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import '@mui/material/styles';
+import { Link } from 'react-router-dom';
 
 const RegistroProfesoresPage = () => {
   const [nombre, setNombre] = useState('');
@@ -43,6 +44,9 @@ const RegistroProfesoresPage = () => {
           <Button variant="contained" onClick={handleRegistroProfesor}>
             Registrar Profesor
           </Button>
+          <Link to="/" className="btn btn-secondary" style={{ marginTop: '16px' }}>
+            Atrás
+          </Link>
         </form>
       </Paper>
     </Container>

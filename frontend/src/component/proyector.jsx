@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import DatasService from '../service/proyectorService';
 import { Paper, Typography, FormControl, InputLabel, Select, MenuItem, TextField, Button, Container } from '@mui/material';
 import '@mui/material/styles';
+import { Link } from 'react-router-dom';
 
 const IngresoProyectoresPage = () => {
   const [marca, setMarca] = useState('');
@@ -50,6 +51,9 @@ const IngresoProyectoresPage = () => {
           <Button variant="contained" onClick={handleIngresoDatos}>
             Ingresar Datos
           </Button>
+          <Link to="/" className="btn btn-secondary" style={{ marginTop: '16px' }}>
+            Atrás
+          </Link>
         </form>
       </Paper>
     </Container>

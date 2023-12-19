@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: backend-prestamo-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081/
+      label: main
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Prestamo
+    username: postgres
+    password: 2468
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
