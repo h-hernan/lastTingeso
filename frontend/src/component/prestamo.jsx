@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import DatasService from '../service/proyectorService';
 import ProfesorService from '../service/profesorService';
+import PrestamoService from '../service/prestamoService';
 
 const PrestamoForm = () => {
   const [proyectores, setProyectores] = useState([]);
@@ -41,9 +42,38 @@ const PrestamoForm = () => {
     fetchProfesores();
   }, []);
 
-  const handleIngresoPrestamo = () => {
-    // Aquí puedes realizar la lógica para enviar el préstamo al backend
-    console.log('Datos a enviar:', selectedProyector, selectedProfesor, usoProyector);
+  const handleIngresoPrestamo = async () => {
+    try {
+      const prestamoData = {
+        proyectorId: selectedProyector,
+        profesorId: selectedProfesor,
+        usoProyector: usoProyector,
+        fechaPrestamo: new Date(),
+      };
+  
+      // Utilizar el servicio para crear un préstamo
+      const response = await PrestamoService.createPrestamo(prestamoData);
+  
+      // Mostrar mensaje de éxito
+      console.log('Préstamo creado con éxito:', response.data);
+    } catch (error) {
+      // Mostrar mensaje de error
+      console.error('Error al crear el préstamo:', error);
+    }
+  };
+
+  // Función para agrupar proyectores por marca y contar la cantidad
+  const groupProyectoresByMarca = () => {
+    const groupedProyectores = proyectores.reduce((accumulator, proyector) => {
+      if (!accumulator[proyector.marca]) {
+        accumulator[proyector.marca] = { marca: proyector.marca, cantidad: 1 };
+      } else {
+        accumulator[proyector.marca].cantidad += 1;
+      }
+      return accumulator;
+    }, {});
+
+    return Object.values(groupedProyectores);
   };
 
   return (
@@ -60,9 +90,9 @@ const PrestamoForm = () => {
             <MenuItem value="" disabled>
               Selecciona un proyector
             </MenuItem>
-            {proyectores.map((proyector) => (
-              <MenuItem key={proyector.id} value={proyector.id}>
-                {proyector.marca}
+            {groupProyectoresByMarca().map((proyector) => (
+              <MenuItem key={proyector.marca} value={proyector.marca}>
+                {`${proyector.marca} (${proyector.cantidad})`}
               </MenuItem>
             ))}
           </Select>
