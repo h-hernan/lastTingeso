@@ -1,25 +1,34 @@
 import React, { useState } from 'react';
 import DatasService from '../service/proyectorService';
-import { Paper, Typography, FormControl, InputLabel, Select, MenuItem, TextField, Button, Container } from '@mui/material';
-import '@mui/material/styles';
+import { Paper, Typography, FormControl, Select, MenuItem, TextField, Button, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const IngresoProyectoresPage = () => {
   const [marca, setMarca] = useState('');
-  const [estado, setEstado] = useState('disponible'); // Modificado el estado inicial
+  const [estado, setEstado] = useState('disponible');
+  const [confirmacion, setConfirmacion] = useState('');
+  const [error, setError] = useState('');
 
-  const marcasPredefinidas = ['Epson', 'Sony', 'BenQ', 'Optoma', 'ViewSonic'];
+  const marcasPredefinidas = ['EPSON', 'ViewSonic'];
 
   const handleIngresoDatos = async () => {
     try {
-      console.log('Datos a enviar:', marca, estado);
-      // Utiliza el servicio para enviar los datos al backend
+      if (!marca) {
+        setError('Por favor, selecciona una marca.');
+        return;
+      }
+
       await DatasService.crearDatas(marca, estado);
-      console.log('Datos de proyector ingresados con éxito');
+      setConfirmacion('Datos de proyector ingresados con éxito');
+      setError('');
+      // Limpiar campos después del éxito
+      setMarca('');
     } catch (error) {
-      console.error('Error al ingresar datos de proyector:', error);
+      setConfirmacion('');
+      setError('Error al ingresar datos de proyector. Por favor, verifica los datos e intenta nuevamente.');
     }
   };
+
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
       <Paper elevation={3} sx={{ padding: 3 }}>
@@ -27,11 +36,12 @@ const IngresoProyectoresPage = () => {
           Ingreso de Datos de Proyectores
         </Typography>
         <form>
-          <p>
-          Marca:
-        </p>
           <FormControl fullWidth sx={{ mb: 2 }}>
-            <Select value={marca} onChange={(e) => setMarca(e.target.value)}>
+            <Select
+              value={marca}
+              onChange={(e) => setMarca(e.target.value)}
+              displayEmpty
+            >
               <MenuItem value="" disabled>
                 Selecciona una marca
               </MenuItem>
@@ -42,15 +52,20 @@ const IngresoProyectoresPage = () => {
               ))}
             </Select>
           </FormControl>
-          <p>
-          Estado:
-        </p>
           <FormControl fullWidth sx={{ mb: 2 }}>
-            <TextField type="text" value={estado} onChange={(e) => setEstado(e.target.value)} disabled /> {/* Modificado el input */}
+            <TextField
+              type="text"
+              value={estado}
+              onChange={(e) => setEstado(e.target.value)}
+              disabled
+              label="Estado"
+            />
           </FormControl>
           <Button variant="contained" onClick={handleIngresoDatos}>
             Ingresar Datos
           </Button>
+          {confirmacion && <Typography color="success">{confirmacion}</Typography>}
+          {error && <Typography color="error">{error}</Typography>}
           <Link to="/" className="btn btn-secondary" style={{ marginTop: '16px' }}>
             Atrás
           </Link>

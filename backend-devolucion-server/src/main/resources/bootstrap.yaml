@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/Devoluciones
     username: postgres
-    password: 1234
+    password: 2468
   jpa:
     hibernate:
       ddl-auto: update

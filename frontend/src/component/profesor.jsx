@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
 import ProfesorService from '../service/profesorService';
 import { Paper, Typography, TextField, Button, Container, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
 const RegistroProfesoresPage = () => {
   const [nombre, setNombre] = useState('');
   const [historial, setHistorial] = useState('Habilitado');
+  const [confirmacion, setConfirmacion] = useState('');
+  const [error, setError] = useState('');
 
   const handleRegistroProfesor = async () => {
     try {
-      console.log('Datos a enviar:', nombre, historial);
-      // Utiliza el servicio para enviar los datos al backend
+      if (!nombre) {
+        setError('Por favor, ingresa el nombre del profesor.');
+        return;
+      }
+
       await ProfesorService.crearProfesor({ nombre, historial });
-      console.log('Profesor registrado con éxito');
+      setConfirmacion('Profesor registrado con éxito');
+      setError('');
+      // Limpiar campos después del éxito
+      setNombre('');
+      setHistorial('Habilitado'); // Puedes ajustar el valor predeterminado según tu lógica
     } catch (error) {
-      console.error('Error al registrar profesor:', error);
+      setConfirmacion('');
+      setError('Error al registrar profesor. Por favor, verifica los datos e intenta nuevamente.');
     }
   };
 
@@ -26,16 +35,24 @@ const RegistroProfesoresPage = () => {
           Registro de Profesores
         </Typography>
         <form>
-          <p>
-            Nombre:
-          </p>
-          <TextField fullWidth value={nombre} onChange={(e) => setNombre(e.target.value)} />
+          <TextField
+            fullWidth
+            label="Nombre del Profesor"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            variant="outlined"
+            margin="normal"
+          />
 
-          <p>
-            Historial:
-          </p>
           <FormControl fullWidth sx={{ mb: 2 }}>
-            <Select value={historial} onChange={(e) => setHistorial(e.target.value)}>
+            <InputLabel id="historial-label">Historial</InputLabel>
+            <Select
+              labelId="historial-label"
+              id="historial"
+              value={historial}
+              onChange={(e) => setHistorial(e.target.value)}
+              label="Historial"
+            >
               <MenuItem value="Habilitado">Habilitado</MenuItem>
               <MenuItem value="Deshabilitado">Deshabilitado</MenuItem>
             </Select>
@@ -44,6 +61,8 @@ const RegistroProfesoresPage = () => {
           <Button variant="contained" onClick={handleRegistroProfesor}>
             Registrar Profesor
           </Button>
+          {confirmacion && <Typography color="success">{confirmacion}</Typography>}
+          {error && <Typography color="error">{error}</Typography>}
           <Link to="/" className="btn btn-secondary" style={{ marginTop: '16px' }}>
             Atrás
           </Link>
